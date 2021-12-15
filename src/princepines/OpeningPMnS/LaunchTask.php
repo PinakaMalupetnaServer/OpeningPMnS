@@ -36,7 +36,7 @@ class LaunchTask extends Task
             $player->sendMessage("Fireworks Stopping.");
             $task = $this->tasks[$player->getId()];
             unset($this->tasks[$player->getId()]);
-            $task->main->getHandler()->cancel();
+            $task->getHandler()->cancel();
         }
     }
 }
