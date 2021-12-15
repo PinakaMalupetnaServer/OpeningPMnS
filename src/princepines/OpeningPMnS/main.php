@@ -26,28 +26,7 @@ class main extends PluginBase implements Listener
         switch ($command->getName()) {
             case "launch":
                 if ($sender instanceof Player) {
-                    foreach($this->getServer()->getOnlinePlayers() as $players) {
-                        $pk = new PlaySoundPacket;
-                        $pk->soundName = "medley.music";
-                        $pk->x = (int)$players->x;
-                        $pk->y = (int)$players->y;
-                        $pk->z = (int)$players->z;
-                        $pk->volume = 1;
-                        $pk->pitch = 1;
-                        $players->dataPacket($pk);
-                    }
-                    $this->timer--;
-                    if ($this->timer <= 131) {
-                        $sender->sendMessage("Fireworks Starting.");
-                        $task = new FireworkTask();
-                        $this->tasks[$sender->getId()] = $task;
-                        $this->getScheduler()->scheduleDelayedRepeatingTask($task, 40,20);
-                    } elseif ($this->timer <= 1) {
-                        $sender->sendMessage("Fireworks Stopping.");
-                        $task = $this->tasks[$sender->getId()];
-                        unset($this->tasks[$sender->getId()]);
-                        $task->getHandler()->cancel();
-                    }
+                    $this->getScheduler()->scheduleRepeatingTask(new LaunchTask($this, $sender->getName()),20);
                 }
                 break;
             case "intro":
